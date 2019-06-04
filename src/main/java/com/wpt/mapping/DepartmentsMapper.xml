@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wpt.dao.DepartmentsMapper">
+  <resultMap id="BaseResultMap" type="com.wpt.bean.Departments">
+    <id column="did" jdbcType="INTEGER" property="did" />
+    <result column="grade" jdbcType="INTEGER" property="grade" />
+    <result column="department" jdbcType="VARCHAR" property="department" />
+    <result column="class_" jdbcType="VARCHAR" property="class" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    did, grade, department, class_, uid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from departments_
+    where did = #{did,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from departments_
+    where did = #{did,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wpt.bean.Departments">
+    insert into departments_ (did, grade, department, 
+      class_, uid)
+    values (#{did,jdbcType=INTEGER}, #{grade,jdbcType=INTEGER}, #{department,jdbcType=VARCHAR}, 
+      #{class,jdbcType=VARCHAR}, #{uid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wpt.bean.Departments">
+    insert into departments_
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="did != null">
+        did,
+      </if>
+      <if test="grade != null">
+        grade,
+      </if>
+      <if test="department != null">
+        department,
+      </if>
+      <if test="class != null">
+        class_,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="did != null">
+        #{did,jdbcType=INTEGER},
+      </if>
+      <if test="grade != null">
+        #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="department != null">
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="class != null">
+        #{class,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wpt.bean.Departments">
+    update departments_
+    <set>
+      <if test="grade != null">
+        grade = #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="department != null">
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="class != null">
+        class_ = #{class,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where did = #{did,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wpt.bean.Departments">
+    update departments_
+    set grade = #{grade,jdbcType=INTEGER},
+      department = #{department,jdbcType=VARCHAR},
+      class_ = #{class,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=INTEGER}
+    where did = #{did,jdbcType=INTEGER}
+  </update>
+</mapper>

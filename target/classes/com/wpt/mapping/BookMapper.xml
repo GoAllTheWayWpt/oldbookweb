@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wpt.dao.BookMapper">
+  <resultMap id="BaseResultMap" type="com.wpt.bean.Book">
+    <id column="bid" jdbcType="INTEGER" property="bid" />
+    <result column="bookname" jdbcType="VARCHAR" property="bookname" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="category" jdbcType="VARCHAR" property="category" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+    <result column="details_url" jdbcType="VARCHAR" property="detailsUrl" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="pub_house" jdbcType="VARCHAR" property="pubHouse" />
+    
+  </resultMap>
+  <sql id="Base_Column_List">
+    bid, bookname, price, category, number, image_url, details_url, uid ,pub_house
+  </sql>
+  	<!-- 
+  <select id="findProductByTypePage" resultType="com.wpt.bean.book">
+	select * from products where category=#{param1} limit #{param2.pageNum},#{param2.pageSize}
+	</select>
+	 -->
+  
+	<!-- 查询总数据量 -->
+	<select id="findCount" resultType="java.lang.Integer">
+	select count(*) from book_
+	</select>
+	<!-- 按条查询 -->
+	<select id="findProductsListPage"  
+		resultMap="BaseResultMap" parameterType="com.wpt.bean.PageBean">
+	select  <include refid="Base_Column_List" />  
+	 from book_ limit #{pageNum},#{pageSize}
+	</select>
+	<!-- 按条和类型查询 -->
+		<select id="findProductsByTypePage" resultMap="BaseResultMap" parameterType="map">
+	select <include refid="Base_Column_List" />   
+	from book_ where category=#{type} limit #{pages.pageNum},#{pages.pageSize}
+	</select>
+	<!-- 搜索 concat('%',#{name},'%')-->
+	<select id="searchProducts" resultMap="BaseResultMap" parameterType="map">
+	select <include refid="Base_Column_List" />   
+	from book_ 
+	where category like concat('%',#{searchBase},'%') 
+	or bookname like concat('%',#{searchBase},'%')
+	or details_url like concat('%',#{searchBase},'%')
+	or pub_house like concat('%',#{searchBase},'%')
+	limit #{pages.pageNum},#{pages.pageSize}
+	</select>
+	<!--  按类型查询 -->
+	<select id="findCountByType" resultType="java.lang.Integer" parameterType="java.lang.String">
+	select  <include refid="Base_Column_List" />   from book_ where category = #{category}
+	</select>
+	<!-- 那卖家得到所有商品 -->
+   <select id="findProductsListByUid" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />  
+    from book_ 
+    where uid = #{uid,jdbcType=INTEGER}
+  </select>
+  <!-- 得到所有商品 -->
+   <select id="findProductsList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from book_
+  </select>
+  <!-- 按商品id查询 -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from book_
+    where bid = #{bid,jdbcType=INTEGER}
+  </select>
+  <!-- 按id删除 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from book_
+    where bid = #{bid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wpt.bean.Book">
+    insert into book_ (bid, bookname, price, 
+      category, number, image_url, 
+      details_url, uid,pub_house)
+    values (#{bid,jdbcType=INTEGER}, #{bookname,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, 
+      #{category,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{imageUrl,jdbcType=VARCHAR}, 
+      #{detailsUrl,jdbcType=VARCHAR}, #{uid,jdbcType=INTEGER},#{pubHouse,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wpt.bean.Book">
+    insert into book_
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bid != null">
+        bid,
+      </if>
+      <if test="bookname != null">
+        bookname,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="category != null">
+        category,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="imageUrl != null">
+        image_url,
+      </if>
+      <if test="detailsUrl != null">
+        details_url,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="pubHouse != null">
+      	pub_house,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bid != null">
+        #{bid,jdbcType=INTEGER},
+      </if>
+      <if test="bookname != null">
+        #{bookname,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="imageUrl != null">
+        #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="detailsUrl != null">
+        #{detailsUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="pubHouse != null">
+      	#{pubHouse,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wpt.bean.Book">
+    update book_
+    <set>
+      <if test="bookname != null">
+        bookname = #{bookname,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="category != null">
+        category = #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="imageUrl != null">
+        image_url = #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="detailsUrl != null">
+        details_url = #{detailsUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="pubHouse != null">
+      	pub_house = #{pubHouse,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where bid = #{bid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wpt.bean.Book">
+    update book_
+    set bookname = #{bookname,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      category = #{category,jdbcType=VARCHAR},
+      number = #{number,jdbcType=INTEGER},
+      image_url = #{imageUrl,jdbcType=VARCHAR},
+      details_url = #{detailsUrl,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=INTEGER},
+      pub_house = #{pubHouse}
+    where bid = #{bid,jdbcType=INTEGER}
+  </update>
+</mapper>
