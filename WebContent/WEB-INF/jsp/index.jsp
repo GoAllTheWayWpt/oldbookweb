@@ -123,7 +123,7 @@
 				<c:forEach items="${productsList }" var="book" varStatus="count">
 				<dl>
 					<dt><a href="${pageContext.request.contextPath }/showProductDetails?bid=${book.bid}">
-					<img src="${pageContext.request.contextPath }/${book.imageUrl}" alt=""/></a></dt>
+					<img src="${book.imageUrl}" alt=""/></a></dt>
 					<dd>
 						<p><a href="${pageContext.request.contextPath }/showProductDetails?bid=${book.bid}">${book.bookname}</a></p>
 						<p>数量：${book.number}</p>
