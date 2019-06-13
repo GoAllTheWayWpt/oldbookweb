@@ -24,8 +24,8 @@
 				</c:if>
 			
 			<li>
-						<a href="${pageContext.request.contextPath }/showAdminIndex"
-							target="_top"><i class="am-icon-user am-icon-fw"></i>图书管理</a>
+						<a href=""
+							target="_top"><i class="am-icon-user am-icon-fw"></i>购物车</a>
 						<a href="${pageContext.request.contextPath }/member"
 							target="_top"><i class="am-icon-user am-icon-fw"></i>账号信息</a>
 					
@@ -43,11 +43,14 @@
 			<form action="${pageContext.request.contextPath}/searchProducts" method="post">
 				<input type="text" id="searchBase" name="searchBase" placeholder="小伙伴，你想找什么?"/><input type="submit" value="搜 索"/>
 			</form>
-			<p>热门搜索：<a href="#">自行车</a> <a href="#">笔记本</a> <a href="#">散热器</a> <a href="#">考研资料</a> <a href="#">摩托车</a> <a href="#">手机</a> <a href="#">轮滑鞋</a> <a href="#">显示器</a> <a href="#">显示器</a> <a href="#">显示器</a> <a href="#">显示器</a></p>
+			<p>热门搜索：<a href="#">红楼梦</a> <a href="#">嫌疑人X的献身</a> <a href="#">白夜行</a>  
+			<a href="#">明朝那些事</a> <a href="#">子不语</a> <a href="#">无人生还</a>
+			 <a href="#">尘埃落定</a> <a href="#">月亮与六便士</a> <a href="#">三体</a></p>
 		</div>
 		<div class="mm fr clearfix">
-			<a href="list.html">我要买</a>
-			<a href="publish.html">我要卖</a>
+		
+			<a href="${pageContext.request.contextPath}/showIndex">我要买书</a>
+			<a href="${pageContext.request.contextPath }/showAdminIndex">我要卖书</a>
 		</div>
 	</div>
 </div>

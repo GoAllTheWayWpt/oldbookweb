@@ -11,10 +11,12 @@
     <result column="details_url" jdbcType="VARCHAR" property="detailsUrl" />
     <result column="uid" jdbcType="INTEGER" property="uid" />
     <result column="pub_house" jdbcType="VARCHAR" property="pubHouse" />
+    <result column="pub_time" jdbcType="VARCHAR" property="pubTime" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
     
   </resultMap>
   <sql id="Base_Column_List">
-    bid, bookname, price, category, number, image_url, details_url, uid ,pub_house
+    bid, bookname, price, category, number, image_url, details_url, uid ,pub_house,pub_time,author
   </sql>
   	<!-- 
   <select id="findProductByTypePage" resultType="com.wpt.bean.book">
@@ -45,11 +47,16 @@
 	or bookname like concat('%',#{searchBase},'%')
 	or details_url like concat('%',#{searchBase},'%')
 	or pub_house like concat('%',#{searchBase},'%')
+	or author like concat('%',#{searchBase},'%')
 	limit #{pages.pageNum},#{pages.pageSize}
 	</select>
 	<!--  按类型查询 -->
-	<select id="findCountByType" resultType="java.lang.Integer" parameterType="java.lang.String">
+	<select id="findProductsByType" resultType="java.lang.Integer" parameterType="java.lang.String">
 	select  <include refid="Base_Column_List" />   from book_ where category = #{category}
+	</select>
+	<!--  按类型查询总数 -->
+	<select id="findCountByType" resultType="java.lang.Integer" parameterType="java.lang.String">
+	select  count(*)   from book_ where category = #{category}
 	</select>
 	<!-- 那卖家得到所有商品 -->
    <select id="findProductsListByUid" resultMap="BaseResultMap">
@@ -65,12 +72,20 @@
     from book_
   </select>
   <!-- 按商品id查询 -->
+  
+  <select id="selectByPrimaryKey"  
+		resultMap="BaseResultMap">
+	select  <include refid="Base_Column_List" />  
+	 from book_ where bid = #{bid}
+	</select>
+	<!--  
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from book_
     where bid = #{bid,jdbcType=INTEGER}
   </select>
+  -->
   <!-- 按id删除 -->
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from book_
@@ -79,10 +94,12 @@
   <insert id="insert" parameterType="com.wpt.bean.Book">
     insert into book_ (bid, bookname, price, 
       category, number, image_url, 
-      details_url, uid,pub_house)
+      details_url, uid,pub_house,
+      pub_time,author)
     values (#{bid,jdbcType=INTEGER}, #{bookname,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, 
       #{category,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{imageUrl,jdbcType=VARCHAR}, 
-      #{detailsUrl,jdbcType=VARCHAR}, #{uid,jdbcType=INTEGER},#{pubHouse,jdbcType=VARCHAR})
+      #{detailsUrl,jdbcType=VARCHAR}, #{uid,jdbcType=INTEGER},#{pubHouse,jdbcType=VARCHAR}
+      #{pubTime,jdbcType=VARCHAR},#{author,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wpt.bean.Book">
     insert into book_
@@ -114,6 +131,12 @@
       <if test="pubHouse != null">
       	pub_house,
       </if>
+      <if test="pubTime != null">
+      	pub_time,
+      </if>
+      <if test="author != null">
+      	author
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="bid != null">
@@ -143,6 +166,12 @@
       <if test="pubHouse != null">
       	#{pubHouse,jdbcType=VARCHAR},
       </if>
+      <if test="pubTime != null">
+      	#{pubTime,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+      	#{author,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.wpt.bean.Book">
@@ -170,7 +199,13 @@
         uid = #{uid,jdbcType=INTEGER},
       </if>
       <if test="pubHouse != null">
-      	pub_house = #{pubHouse,jdbcType=VARCHAR}
+      	pub_house = #{pubHouse,jdbcType=VARCHAR},
+      </if>
+      <if test="pubTime != null">
+      	pub_time = #{pubTime,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+      	author = #{author,jdbcType=VARCHAR}
       </if>
     </set>
     where bid = #{bid,jdbcType=INTEGER}
@@ -184,7 +219,9 @@
       image_url = #{imageUrl,jdbcType=VARCHAR},
       details_url = #{detailsUrl,jdbcType=VARCHAR},
       uid = #{uid,jdbcType=INTEGER},
-      pub_house = #{pubHouse}
+      pub_house = #{pubHouse},
+      pub_time = #{pubTime},
+      author = #{author}
     where bid = #{bid,jdbcType=INTEGER}
   </update>
 </mapper>

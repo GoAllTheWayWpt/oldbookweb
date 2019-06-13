@@ -23,7 +23,7 @@ public interface BookService {
 
 	public int saveProduct(Book bo);
 
-	public Integer findCountByType(String type);
+	
 
 
 
@@ -35,5 +35,9 @@ public interface BookService {
 	List<Book> findProductsListPage(PageBean page);
 	List<Book> searchProducts( String searchBase, PageBean pages);
 	public List<Book> findProductsByTypePage(String type, PageBean pages);
+
+	public int findCountByType(String type);
+
+	List<Book> findProductsByType(String type);
 	
 }

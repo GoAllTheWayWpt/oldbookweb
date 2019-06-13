@@ -27,7 +27,7 @@
 <%@ include file="header.jsp"%>
 
 <div class="banner container">
-	<img src="images/notice.png" alt="" style="width: 1200px;height: auto;"/>
+	<img src="images/logo01.jpg" alt="" style="width: 1200px;height: 200px;"/>
 	<div class="clearfix">
 		<div class="about fl">
 			<h1>易书网</h1>
@@ -37,23 +37,23 @@
 		<div id="fsD1" class="focus fl">
 			<div id="D1pic1" class="fPic">
 				<div class="fcon">
-					<a href="detail.html"><img src="images/focus1.jpg" /></a>
+					<a href="detail.html"><img src="images/focus_1.jpg" /></a>
 					<span class="shadow"><a href="detail.html">便宜出售一本好书111111</a></span>
 				</div>
 				<div class="fcon">
-					<a href="detail.html"><img src="images/focus2.jpg" /></a>
+					<a href="detail.html"><img src="images/focus_2.jpg" /></a>
 					<span class="shadow"><a href="detail.html">便宜出售一本好书222222</a></span>
 				</div>
 				<div class="fcon">
-					<a href="detail.html"><img src="images/focus3.jpg" /></a>
+					<a href="detail.html"><img src="images/focus_3.jpg" /></a>
 					<span class="shadow"><a href="detail.html">便宜出售一本好书3333333</a></span>
 				</div>
 				<div class="fcon">
-					<a href="detail.html"><img src="images/focus4.jpg" /></a>
+					<a href="detail.html"><img src="images/focus_4.jpg" /></a>
 					<span class="shadow"><a href="detail.html">便宜出售一本好书4444444</a></span>
 				</div>
 				<div class="fcon">
-					<a href="detail.html"><img src="images/focus5.jpg" /></a>
+					<a href="detail.html"><img src="images/focus_5.jpg" /></a>
 					<span class="shadow"><a href="detail.html">便宜出售一本好书5555555</a></span>
 				</div>
 			</div>
@@ -123,7 +123,8 @@
 				<c:forEach items="${productsList }" var="book" varStatus="count">
 				<dl>
 					<dt><a href="${pageContext.request.contextPath }/showProductDetails?bid=${book.bid}">
-					<img src="${book.imageUrl}" alt=""/></a></dt>
+					<img src="${book.imageUrl}" width="300" height="350" />
+					</a></dt>
 					<dd>
 						<p><a href="${pageContext.request.contextPath }/showProductDetails?bid=${book.bid}">${book.bookname}</a></p>
 						<p>数量：${book.number}</p>
@@ -238,7 +239,7 @@
 		<li><a href="#" title="2">工具书区</a></li>
 		<li><a href="#" title="3">分享区</a></li>
 		<li><a href="#" title="4">返回顶部</a></li>
-		<li><a  href="http://wpa.qq.com/msgrd?v=3&uin=2078140086&site=qq&menu=yes">联系客服</a></li>
+		<li><a  href="test.html">联系客服</a></li>
 	</ul>
 </div>
 <script type="text/javascript">

@@ -27,15 +27,7 @@
 	<script src="js/plugins/layer/layer.js"></script>
 	<script type="text/javascript" src="plugins/ckeditor/ckeditor.js"></script>
 	<script type="text/javascript" src="js/checkAddProducts.js"></script>
-	<script type="text/javascript" charset="utf-8" src="ueditor/ueditor.config.js"></script>  
-	<script type="text/javascript" charset="utf-8" src="ueditor/ueditor.all.min.js"> </script>  
-	<script type="text/javascript" charset="utf-8" src="ueditor/lang/zh-cn/zh-cn.js"></script>  
-	<script type="text/javascript">
-	var ue = UE.getEditor('content');
-	window.onload=function(){
-		InitControl();
-	}
-	</script>
+	
 
 </head>
 
@@ -46,8 +38,8 @@
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
 						<h5>
-							商品管理
-							<small>商品修改</small>
+							书籍管理
+							<small>书籍修改</small>
 						</h5>
 						<div class="ibox-tools">
 							<a class="collapse-link">
@@ -61,10 +53,20 @@
 						enctype="multipart/form-data" onsubmit="return check()">
 							<!-- 商品名称输入框 -->
 							<div class="form-group">
-								<label class="col-sm-2 control-label">商品名称</label>
+								<label class="col-sm-2 control-label">书籍名称</label>
 								<div class="col-sm-4">
 									<input id="bookname" name="bookname" type="text" value="${product.bookname }" class="form-control" onblur="checkname()" required="required">
 									<span id="name_span"></span>
+									<br />
+								</div>
+							</div>
+							<div class="hr-line-dashed"></div>
+							<!-- 商品作者输入框 -->
+							<div class="form-group">
+								<label class="col-sm-2 control-label">书籍作者</label>
+								<div class="col-sm-4">
+									<input id="author" name=author type="text" value="${product.author }" class="form-control" onblur="checkauthor()" required="required">
+									<span id="author_span"></span>
 									<br />
 								</div>
 							</div>
@@ -120,27 +122,29 @@
 								</div>
 							</div>
 							<div class="hr-line-dashed"></div>
-							<!-- 商品图片 -->
-							<!--  
+							<!-- 商品出版时间输入框 -->
 							<div class="form-group">
-								<label class="col-sm-2 control-label">商品图片</label>
+								<label class="col-sm-2 control-label">出版时间</label>
 								<div class="col-sm-4">
-									<img src="" id="img" height="50px"> <input name="imgpic"
-										type="file" value="${pageContext.request.contextPath }/${pro.imageUrl}" class="form-control"
-										onchange="checkimg(this)" required="required">
+									<input name="pubTime" type="date" value="${product.pubTime }" class="form-control"
+										required="required">
+
 								</div>
 							</div>
-							
 							<div class="hr-line-dashed"></div>
-							-->
 							<!-- 商品详情输入框 -->
 							<div class="form-group">
 								<label class="col-sm-2 control-label">商品详情</label>
-								<div class="col-sm-4">
-									<textarea name="content" id="content" style="width: 800px; height: 400px; margin: 0 auto;">${product.detailsUrl }</textarea>
-			
+								<div class="col-sm-7">
+			<div id="div1">
+			${product.detailsUrl }
+        <br/>
+    </div>
+    <textarea hidden=true name="content" id="text1" style="width:100%; height:200px;"></textarea>
+								</div>
 								</div>
 							</div>
+							
 							
 							<div class="hr-line-dashed"></div>
 
@@ -158,6 +162,20 @@
 	</div>
 
 </body>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="wangEditor/release/wangEditor.min.js"></script>
+    <script type="text/javascript">
+        var E = window.wangEditor
+        var editor = new E('#div1')
+        var $text1 = $('#text1')
+        editor.customConfig.onchange = function (html) {
+            // 监控变化，同步更新到 textarea
+            $text1.val(html)
+        }
+        editor.create()
+        // 初始化 textarea 的值
+        $text1.val(editor.txt.html())
+    </script>
 <script type="text/javascript">
 $(function(){
 	$("#category").val("${product.category}");

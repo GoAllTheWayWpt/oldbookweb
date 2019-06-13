@@ -22,6 +22,7 @@ public interface BookMapper {
 
 	List<Book> findProductsList();
 
+	List<Book> findProductsByType(String type);
 	Integer findCountByType(String type);
 	 
 			   

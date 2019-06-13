@@ -71,9 +71,9 @@ public class AutoLoginFilter implements Filter {
 			s = s + path.charAt(i);
 		}
 		Boolean flag = false;
-		System.out.println("s===="+s);
+		//System.out.println("s===="+s);
 		String[] nourl = { "bookImages","css", "font", "fonts", "images", "img", "js",
-				"pic", "AmazeUI-2.4.2" ,"upload"};
+				"pic", "AmazeUI-2.4.2" ,"upload","simditor"};
 		for (String s1 : nourl) {
 			if (s1.equals(s)) {
 				flag = true;

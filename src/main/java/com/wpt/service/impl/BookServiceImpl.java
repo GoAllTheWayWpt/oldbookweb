@@ -48,12 +48,12 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public int saveProduct(Book bo) {
-		return bookMapper.insert(bo);
+		return bookMapper.insertSelective(bo);
 	}
 
 	@Override
-	public Integer findCountByType(String type) {
-		return bookMapper.findCountByType(type);
+	public List<Book> findProductsByType(String type) {
+		return bookMapper.findProductsByType(type);
 	}
 
 	
@@ -92,6 +92,16 @@ public class BookServiceImpl implements BookService {
 		System.out.println(pages.getPageNum()+"  "+pages.getPageSize());
 		return this.bookMapper.searchProducts(searchBase, pages);
 	}
+
+	
+
+	@Override
+	public int findCountByType(String type) {
+		// TODO Auto-generated method stub
+		return this.bookMapper.findCountByType(type);
+	}
+
+	
 
 	
 

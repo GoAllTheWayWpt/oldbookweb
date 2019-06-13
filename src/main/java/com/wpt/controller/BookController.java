@@ -2,7 +2,6 @@ package com.wpt.controller;
 
 import java.io.File;
 
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,6 +35,42 @@ public class BookController {
 	@Autowired
 	private UserService userService;
 
+	public List<Book> splitImageUrl(List<Book> productslist) {
+
+		for (Book b : productslist) {
+			String imageUrlList = b.getImageUrl();
+			String[] iul = imageUrlList.split(",");
+			int l = iul.length;
+			if(l>=1) {
+				b.setImageUrl(iul[0]);
+			}
+			if(l>=2) {
+				b.setImageUrl_1(iul[1]);
+			}
+			if(l>=3) {
+				b.setImageUrl_2(iul[2]);
+			}
+		}
+		return productslist;
+	}
+	public Book splitImageUrl(Book b) {
+
+		
+			String imageUrlList = b.getImageUrl();
+			String[] iul = imageUrlList.split(",");
+			int l = iul.length;
+			if(l>=1) {
+				b.setImageUrl(iul[0]);
+			}
+			if(l>=2) {
+				b.setImageUrl_1(iul[1]);
+			}
+			if(l>=3) {
+				b.setImageUrl_2(iul[2]);
+			}
+		
+		return b;
+	}
 	// 打开商品管理页面
 	@RequestMapping("showProductList")
 	public String showProductList(HttpServletRequest request, Model model) {
@@ -52,6 +87,7 @@ public class BookController {
 			// 查询所有的商品
 			List<Book> productslist = bookService.findProductsListByUid(user.getUid());
 
+			productslist = splitImageUrl(productslist);
 			// 将查询的商品传递到页面中显示
 			// 相当于request.setAttribute
 			model.addAttribute("productslist", productslist);
@@ -73,10 +109,30 @@ public class BookController {
 	// 添加商品
 //	
 	@RequestMapping("saveProduct")
-	public String saveProduct(HttpServletRequest request, String content, Book bo, MultipartFile imgpic) {
+	public String saveProduct(HttpServletRequest request, String content, Book bo, MultipartFile imgpic,
+			MultipartFile imgpic_1, MultipartFile imgpic_2,String pubTime) throws ParseException {
 		// System.out.println("添加商品"+content);
-		String upload = UploadUtils.upload(imgpic);
+		// 2cb34282049845b39ee0eb6aef8fb6b1
+		/// upload/e73c6606ba5f458b85ad08d93bb7ccad.jpg,/upload/11bb7df2e83c454bb1109bf1975cf122.png,/upload/59d26b56cd6847f3b8310eb31e825ff5.jpg
+		String upload="";
+		String upload_1="";
+		String upload_2="";
+		if (imgpic.isEmpty()) {
+			upload = "/upload/2cb34282049845b39ee0eb6aef8fb6b1";
+		} else {
+			upload = UploadUtils.upload(imgpic);
+		}
+		if(!imgpic_1.isEmpty()) {
+			upload_1 = UploadUtils.upload(imgpic_1);
+			upload += "," + upload_1;
+		}
+		if(!imgpic_2.isEmpty()) {
+			upload_2 = UploadUtils.upload(imgpic_2);
+			upload += "," + upload_2;
+		}
+		
 		System.out.println(imgpic);
+		System.out.println(pubTime);
 		bo.setImageUrl(upload);
 		HttpSession session = request.getSession();
 		System.out.println(session);
@@ -87,10 +143,11 @@ public class BookController {
 			System.out.println(user.toString());
 		}
 
+		bo.setPubTime(pubTime);
 		System.out.println(bo.toString());
+		System.out.println(content);
 		bo.setDetailsUrl(content);
 		bo.setUid(user.getUid());
-
 		bookService.saveProduct(bo);
 		System.out.println(bo);
 		// System.out.println(imageUrl.getOriginalFilename());
@@ -169,7 +226,7 @@ public class BookController {
 		request.setAttribute("last", last);
 		// 查询要显示的类型的商品
 		List<Book> bookList = bookService.findProductsListPage(pages);
-
+		bookList = splitImageUrl(bookList);
 		// 将商品传递到页面中展示
 		request.setAttribute("productsList", bookList);
 		return "productkinds";
@@ -177,20 +234,19 @@ public class BookController {
 
 	// 按类型找出图书界面
 	@RequestMapping("showProductsByType")
-	public String showProductsType(HttpServletRequest request, 
-			HttpServletResponse response, String type) {
+	public String showProductsType(HttpServletRequest request, HttpServletResponse response, String type) {
 		System.out.println("按类型展示" + " " + type);
-	//	model.addAttribute("booktype", type);
+		// model.addAttribute("booktype", type);
 		// 获取session
 		HttpSession session = request.getSession();
-		if(type!=null) {
-			session.setAttribute("booktype",type);
-		}else {
-			type =  (String) session.getAttribute("booktype");
+		if (type != null) {
+			session.setAttribute("booktype", type);
+		} else {
+			type = (String) session.getAttribute("booktype");
 		}
 		// 得到总书本数
-		int total = bookService.findCount();
-		int count = 6;
+		int total = bookService.findCountByType(type);
+		int count = 7;
 
 		// 创建pageBean的对象，设置页面信息
 		PageBean pages = new PageBean();
@@ -212,34 +268,33 @@ public class BookController {
 		start = start < 0 ? 0 : start;
 		pre = pre < 0 ? 0 : pre;
 		next = next > last ? last : next;
-		
+
 		pages.setPageSize(count);
 		pages.setPageNum(start);
 		request.setAttribute("next", next);
 		request.setAttribute("pre", pre);
 		request.setAttribute("last", last);
-		
-		System.out.println(start+"  "+count+"  "+ type);
+
+		System.out.println(start + "  " + count + "  " + type);
 		// 查询要显示的类型的商品
 		List<Book> bookList = bookService.findProductsByTypePage(type, pages);
-
+		bookList = splitImageUrl(bookList);
 		// 将商品传递到页面中展示
 		request.setAttribute("productsList", bookList);
 		return "productkinds";
 	}
-	
+
 	// 按类型找出图书界面
 	@RequestMapping("searchProducts")
-	public String searchProducts(HttpServletRequest request, 
-			HttpServletResponse response, String searchBase) {
+	public String searchProducts(HttpServletRequest request, HttpServletResponse response, String searchBase) {
 		System.out.println("搜索：" + " " + searchBase);
-	
+
 		// 获取session
 		HttpSession session = request.getSession();
-		if(searchBase!=null) {
-			session.setAttribute("booktype",searchBase);
-		}else {
-			searchBase =  (String) session.getAttribute("booktype");
+		if (searchBase != null) {
+			session.setAttribute("booktype", searchBase);
+		} else {
+			searchBase = (String) session.getAttribute("booktype");
 		}
 		// 得到总书本数
 		int total = bookService.findCount();
@@ -265,25 +320,26 @@ public class BookController {
 		start = start < 0 ? 0 : start;
 		pre = pre < 0 ? 0 : pre;
 		next = next > last ? last : next;
-		
+
 		pages.setPageSize(count);
 		pages.setPageNum(start);
 		request.setAttribute("next", next);
 		request.setAttribute("pre", pre);
 		request.setAttribute("last", last);
-		
-		System.out.println(start+"  "+count+"  "+ searchBase);
+
+		System.out.println(start + "  " + count + "  " + searchBase);
 		// 查询要显示的类型的商品
 		List<Book> bookList = bookService.searchProducts(searchBase, pages);
-
+		bookList = splitImageUrl(bookList);
 		// 将商品传递到页面中展示
 		request.setAttribute("productsList", bookList);
 		return "productkinds";
 	}
-	
+
 	@RequestMapping("findProductById")
 	public String findProductById(String bid, Model model) {
 		Book book = bookService.findProductById(Integer.parseInt(bid));
+		book = splitImageUrl(book);
 		model.addAttribute("product", book);
 		return "productinfo";
 	}
@@ -293,6 +349,8 @@ public class BookController {
 		String bid = request.getParameter("bid");
 		System.out.println(bid);
 		Book book = bookService.findProductById(Integer.parseInt(bid));
+		book = splitImageUrl(book);
+		System.out.println("书的详细信息" + book.toString());
 		model.addAttribute("product", book);
 		return "productDetails";
 	}
